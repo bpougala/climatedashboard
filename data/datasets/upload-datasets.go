@@ -12,7 +12,7 @@ import (
 )
 
 func ConnectToFirebase() (*firebase.App, error) {
-	opt := option.WithCredentialsFile("../serviceAccountKey.json")
+	opt := option.WithCredentialsFile("serviceAccountKey.json")
 	config := &firebase.Config{StorageBucket: "climatedashboard-f0be5.appspot.com"}
 	app, err := firebase.NewApp(context.Background(), config, opt)
 	if err != nil {
@@ -24,16 +24,13 @@ func  UploadToGoogleCloud(app *firebase.App, body string, filename string, objec
 	ctx := context.Background()
 	tmpFile := fmt.Sprintf("tmp/%v", filename)
 	err := CreateTempFile(body, tmpFile)
-	fmt.Println("creating temp file")
 	if err != nil { return err }
-	fmt.Println("tmp file created")
 	client, err := app.Storage(ctx)
 	if err != nil { return err }
 	bucket, err := client.DefaultBucket()
 	if err != nil { return err }
-	file, err := os.Open(filename)
+	file, err := os.Open(tmpFile)
 	if err != nil { return err}
-	fmt.Println("Opened file")
 	defer file.Close()
 	ctx, cancel := context.WithTimeout(ctx, time.Second*50)
 	defer cancel()
@@ -42,7 +39,10 @@ func  UploadToGoogleCloud(app *firebase.App, body string, filename string, objec
 	if _, err = io.Copy(writer, file); err != nil {
 		return fmt.Errorf("io.Copy error: %v", err)
 	}
-	fmt.Printf("Blob successfully uploaded: %v", object)
+	if err := writer.Close(); err != nil {
+		return fmt.Errorf("Writer.Close: %v", err)
+	}
+	fmt.Printf("Blob successfully uploaded: %v\n", object)
 	return nil
 }
 
