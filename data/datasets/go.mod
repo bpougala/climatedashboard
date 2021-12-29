@@ -2,7 +2,10 @@ module climatedashboard.co/datasets
 
 go 1.17
 
-require firebase.google.com/go v3.13.0+incompatible
+require (
+	firebase.google.com/go v3.13.0+incompatible
+	google.golang.org/api v0.60.0
+)
 
 require (
 	cloud.google.com/go v0.97.0 // indirect
@@ -24,7 +27,6 @@ require (
 	golang.org/x/sys v0.0.0-20211025201205-69cdffdb9359 // indirect
 	golang.org/x/text v0.3.6 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
-	google.golang.org/api v0.60.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/genproto v0.0.0-20211028162531-8db9c33dc351 // indirect
 	google.golang.org/grpc v1.40.0 // indirect
