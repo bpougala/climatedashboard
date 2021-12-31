@@ -9,16 +9,17 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "Biko Pougala",
   "license": "ISC",
   "devDependencies": {
+    "@types/d3": "^7.1.0",
     "source-map-loader": "^1.0.0",
     "ts-loader": "^9.2.6",
     "typescript": "^4.5.4",
     "webpack-cli": "^4.9.1"
   },
   "dependencies": {
-    "csv-parser": "^3.0.0",
+    "d3": "^7.2.1",
     "firebase": "^9.6.1",
     "webpack": "^5.65.0"
   }
