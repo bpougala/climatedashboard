@@ -1,6 +1,7 @@
 import * as d3 from 'd3';
+import {max} from "d3";
 
-const margin = {top: 10, right: 30, bottom: 30, left: 60},
+const margin = {top: 10, right: 30, bottom: 30, left: 0},
     width = 460 - margin.left - margin.right,
     height = 400 - margin.top - margin.bottom;
 let xNudge = 50;
@@ -11,13 +12,16 @@ export function drawPlot(selector : string, multiDimArray : string[][]) {
     const minYear : number = d3.min(multiDimArray.slice(1), function(line) { return parseInt(line[0])});
     const maxCarbon : number = d3.max(multiDimArray.slice(1), function(line) { return parseInt(line[1])});
     const minCarbon : number = d3.min(multiDimArray.slice(1), function(line) { return parseInt(line[1])});
-    const y = d3.scaleLinear().domain([minCarbon, maxCarbon])
-        .range([height, 0]);
+    console.log("minCarbon: " + minCarbon + ", maxCarbon: " + maxCarbon);
+
+
+    const scale = d3.scaleLinear().domain([minCarbon, maxCarbon])
+        .range([height/2, 0])
 
     const x = d3.scaleLinear().domain([minYear, maxYear])
-        .range([0, width]);
+        .range([minCarbon, maxCarbon]);
 
-    const yAxis = d3.axisLeft(y);
+    const yAxis = d3.axisLeft(scale);
     const xAxis = d3.axisBottom(x);
     const line = d3.line()
         .x(function(elem) { return elem[0]; })
@@ -31,7 +35,7 @@ export function drawPlot(selector : string, multiDimArray : string[][]) {
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform", "translate(" + margin.top + "," + margin.bottom + ")")
-        .call(xAxis);
+        .call(yAxis);
 }
 
 function flattenArray(subArray : Array<string>) {
